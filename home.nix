@@ -37,6 +37,7 @@
     postgresql
     mkcert
     cabal2nix
+    neovide
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -52,6 +53,13 @@
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
+    ".config/neovide/config.toml".text = ''
+      [font]
+      normal = ["PragmataPro Mono Liga"]
+      size = 12
+      [font.features]
+      "PragmataPro Mono Liga" = ["-aalt"]
+    '';
   };
 
   # Home Manager can also manage your environment variables through
@@ -90,13 +98,6 @@
     enable = true;
     enableZshIntegration = true;
   };
-  programs.neovide.enable = true;
-  programs.neovide.settings = {
-      font = {
-          normal = ["PragmataPro Mono Liga"];
-          size = 14.0;
-        };
-    };
   programs.git.enable = true;
   programs.lazygit.enable = true;
   programs.tmux = {
