@@ -38,6 +38,7 @@
     mkcert
     cabal2nix
     neovide
+    tenki
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -123,6 +124,7 @@
       setw -g window-status-format ' #I #[fg=white]#W #[fg=yellow]#F '
       setw -g window-status-bell-style 'fg=yellow bg=red bold'
       set -g message-style 'fg=yellow bg=red bold'
+      set -g status-position top
     '';
   };
   programs.direnv = {
@@ -154,4 +156,5 @@
   };
   programs.htop.enable = true;
   programs.gpg.enable = true;
+  programs.fastfetch.enable = true;
 }
