@@ -157,4 +157,28 @@
   programs.htop.enable = true;
   programs.gpg.enable = true;
   programs.fastfetch.enable = true;
+  programs.wezterm = {
+    enable = true;
+    enableZshIntegration = true;
+    extraConfig = ''
+      local config = wezterm.config_builder()
+
+      config.font = wezterm.font {
+        family = 'PragmataPro Mono Liga',
+        harfbuzz_features = { 'calt', 'clig', 'liga', 'dlig' }
+      }
+
+      config.font_size = 12
+      config.line_height = 0.9
+
+      config.color_scheme = 'Ef-Winter'
+
+      config.use_fancy_tab_bar = true
+      config.hide_tab_bar_if_only_one_tab = true
+
+      config.window_decorations = "TITLE | MACOS_USE_BACKGROUND_COLOR_AS_TITLEBAR_COLOR | INTEGRATED_BUTTONS | RESIZE"
+
+      return config
+    '';
+  };
 }
