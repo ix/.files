@@ -1,6 +1,13 @@
 { config, pkgs, ... }:
 
 {
+  nixpkgs = {
+    config = {
+      allowUnfree = true; 
+      allowUnfreePredicate = (_: true);
+    };
+  };
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "rose";
@@ -34,34 +41,23 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-    postgresql
-    mkcert
     cabal2nix
-    neovide
+    coreutils-prefixed
+    discount
+    editorconfig-core-c
+    fd
+    hidden-bar
     tenki
+    imagemagick
+    exiftool
+    parallel
+    ghostty-bin
+    fortune
+    hyperfine
+    fswatch
+    superhtml
+    shellcheck
   ];
-
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
-    ".config/neovide/config.toml".text = ''
-      [font]
-      normal = ["PragmataPro Mono Liga"]
-      size = 12
-      [font.features]
-      "PragmataPro Mono Liga" = ["-aalt"]
-    '';
-  };
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -83,6 +79,8 @@
     EDITOR = "nvim";
     HOME_NIX = "/Users/rose/.config/home-manager/home.nix";
     ZSH_DISABLE_COMPFIX = "true";
+    PURE_PROMPT_SYMBOL = "$";
+    PURE_PROMPT_VICMD_SYMBOL = "⌘";
   };
 
   # Let Home Manager install and manage itself.
@@ -93,6 +91,9 @@
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+    initLua = ''
+      require("config.lazy") 
+    '';
   };
   programs.ripgrep.enable = true;
   programs.fzf = {
@@ -104,7 +105,7 @@
   programs.tmux = {
     enable = true;
     mouse = true;
-    keyMode = "emacs";
+    keyMode = "vi";
     escapeTime = 0;
     extraConfig = ''
       setw -g mode-style 'fg=black bg=red bold'
@@ -125,6 +126,8 @@
       setw -g window-status-bell-style 'fg=yellow bg=red bold'
       set -g message-style 'fg=yellow bg=red bold'
       set -g status-position top
+      set -g default-terminal "screen-256color"
+      set -as terminal-features ",xterm-256color:RGB"
     '';
   };
   programs.direnv = {
@@ -133,18 +136,16 @@
   };
   programs.zsh = {
     enable = true;
-    enableCompletion = true;
-    completionInit = "autoload -U compinit && compinit -u";
     autocd = true;
     shellAliases = {};
-    initExtra = ''
-      bindkey -e
-    '';
     syntaxHighlighting.enable = true;
-  };
-  programs.zsh.oh-my-zsh = {
-    enable = true;
-    theme = "nicoulaj";
+    antidote = {
+      enable = true;
+      plugins = [ "sindresorhus/pure" ];
+    };
+    initContent = ''
+      autoload -Uz promptinit && promptinit && prompt pure
+    '';
   };
   programs.eza = {
     enable = true;
@@ -157,28 +158,24 @@
   programs.htop.enable = true;
   programs.gpg.enable = true;
   programs.fastfetch.enable = true;
-  programs.wezterm = {
-    enable = true;
-    enableZshIntegration = true;
-    extraConfig = ''
-      local config = wezterm.config_builder()
-
-      config.font = wezterm.font {
-        family = 'PragmataPro Mono Liga',
-        harfbuzz_features = { 'calt', 'clig', 'liga', 'dlig' }
-      }
-
-      config.font_size = 12
-      config.line_height = 0.9
-
-      config.color_scheme = 'Ef-Winter'
-
-      config.use_fancy_tab_bar = true
-      config.hide_tab_bar_if_only_one_tab = true
-
-      config.window_decorations = "TITLE | MACOS_USE_BACKGROUND_COLOR_AS_TITLEBAR_COLOR | INTEGRATED_BUTTONS | RESIZE"
-
-      return config
-    '';
+  programs.ghostty.package = null;
+  programs.ghostty.enable = true;
+  programs.ghostty.enableZshIntegration = true;
+  programs.ghostty.settings = {
+    font-family = "Berkeley Mono ExtraCondensed";
+    # font-family = "PragmataPro Mono Liga";
+    font-size = 12.0;
+    theme = "kanso-zen";
+    window-colorspace = "display-p3";
+    macos-icon = "custom-style";
+    macos-icon-frame = "beige";
+    macos-icon-ghost-color = "#ffffff";
+    macos-icon-screen-color = "#000000";
+  };
+  programs.bat.enable = true;
+  programs.bat.config = {
+    theme = "ansi";
+    style = "numbers,changes,header,grid";
+    italic-text = "always";
   };
 }
