@@ -108,26 +108,26 @@
     keyMode = "vi";
     escapeTime = 0;
     extraConfig = ''
-      setw -g mode-style 'fg=black bg=red bold'
-      set -g pane-border-style 'fg=red'
-      set -g pane-active-border-style 'fg=yellow'
+      setw -g mode-style 'fg=green bg=default bold'
+      set -g pane-border-style 'fg=green'
+      set -g pane-active-border-style 'fg=white'
       set -g status-position bottom
       set -g status-justify left
-      set -g status-style 'fg=red'
+      set -g status-style 'fg=green'
       set -g status-left ""
       set -g status-left-length 10
-      set -g status-right-style 'fg=black bg=yellow'
-      set -g status-right '%Y-%m-%d %H:%M '
+      set -g status-right-style 'fg=white bg=default'
+      set -g status-right ' [#(pmset -g batt | grep -o "[0-9]\{1,3\}%%")] %H:%M '
       set -g status-right-length 50
-      setw -g window-status-current-style 'fg=black bg=red'
+      setw -g window-status-current-style 'fg=green bg=default'
       setw -g window-status-current-format ' #I #W #F '
-      setw -g window-status-style 'fg=red bg=black'
-      setw -g window-status-format ' #I #[fg=white]#W #[fg=yellow]#F '
-      setw -g window-status-bell-style 'fg=yellow bg=red bold'
-      set -g message-style 'fg=yellow bg=red bold'
-      set -g status-position top
-      set -g default-terminal "screen-256color"
-      set -as terminal-features ",xterm-256color:RGB"
+      setw -g window-status-style 'fg=white bg=default'
+      setw -g window-status-format ' #I #W #F '
+      setw -g window-status-bell-style 'fg=red bg=default bold'
+      set -g message-style 'fg=red bg=default bold'
+      set -g default-terminal "tmux-256color"
+      set -as terminal-features ",tmux-256color:RGB"
+      set -g set-clipboard on
     '';
   };
   programs.direnv = {
@@ -165,12 +165,18 @@
     font-family = "Berkeley Mono ExtraCondensed";
     # font-family = "PragmataPro Mono Liga";
     font-size = 12.0;
-    theme = "kanso-zen";
+    theme = "Gruvbox Dark Hard";
     window-colorspace = "display-p3";
     macos-icon = "custom-style";
     macos-icon-frame = "beige";
     macos-icon-ghost-color = "#ffffff";
     macos-icon-screen-color = "#000000";
+    macos-option-as-alt = "left";
+    keybind = [
+      "global:cmd+slash=toggle_quick_terminal"
+    ];
+    window-padding-y = "0,0";
+    window-padding-x = "0,0";
   };
   programs.bat.enable = true;
   programs.bat.config = {
